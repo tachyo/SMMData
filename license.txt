@@ -1,0 +1,4 @@
+The database in this repository is made available under the Open Database License: 
+http://opendatacommons.org/licenses/dbcl/1.0/
+
+All source code in this repository is made available under the GNU General Public License 3: https://www.gnu.org/licenses/gpl-3.0.en.html 
