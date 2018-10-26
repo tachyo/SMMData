@@ -28,24 +28,30 @@ for url in search:
             lastResponse = r.status_code
             print("{:>3} {}".format(lastResponse, r.reason))
             if lastResponse != 200:
+                sleep_sec = 30*tries
                 logger.error("received {} requesting {}".format(lastResponse, url))
-                print("request unsuccessful! we received an http error code")
-                print("this could mean that nintendo is rate-limiting us")
-                print("or a more generic error somewhere in the network happened")
-                print("ether way the problem should resolve itself")
-                print("will retry in {} seconds".format(30*tries))
-                print("more information on what happened has been written to error.log")
-                time.sleep(30**tries)
+                print(
+                    "Request unsuccessful! we received an http error code.\n"
+                    "This could mean that nintendo is rate-limiting us.\n"
+                    "Or a more generic error somewhere in the network happened.\n"
+                    "Ether way the problem should resolve itself.\n"
+                    "Will retry in {} seconds.\n"
+                    "More information on what happened has been written to error.log"
+                    .format(sleep_secs))
+                time.sleep(sleep_sec)
                 continue
 
         except requests.exceptions.RequestException as e:
+            sleep_sec = 60
             logger.error("network error while requesting {}\n{}".format(url, e))
-            print("an network error occurred!")
-            print("this is usually not a problem an will resolve itself")
-            print("if the problem persists please double check your internet connection")
-            print("will retry in {} seconds".format(60))
-            print("more information on what happened has been written to error.log")
-            time.sleep(60)
+            print(
+                "A network error occurred!\n"
+                "This is usually not a problem an will resolve itself.\n"
+                "If the problem persists please double check your internet connection.\n"
+                "Will retry in {} seconds.\n"
+                "More information on what happened has been written to error.log"
+                .format(sleep_secs))
+            time.sleep(sleep_sec)
             lastResponse = -1
             continue
 
@@ -55,20 +61,22 @@ for url in search:
                 levelInfo = (SMMParser.parseLevlCard(c))
             except Exception as e:
                 logger.error("parsing error while processing \n{}\n{}".format(url,e))
-                print("an parsing error occurred!")
-                print("probably caused by unexpected/incomplete level information")
-                print("this level will not be inserted into the database")
-                print("more information on what happened has been written to error.log")
+                print(
+                    "A parsing error occurred!\n"
+                    "Probably caused by unexpected/incomplete level information.\n"
+                    "This level will not be inserted into the database.\n"
+                    "More information on what happened has been written to error.log")
                 continue
 
             try:
                 db.persistLevelInfo(levelInfo)
             except Exception as e:
                 logger.error("database error while processing \n{}\n{}".format(url, e))
-                print("an database error occurred!")
-                print("this should actually never happen, but is not critical")
-                print("this level will not be inserted into the database")
-                print("more information on what happened has been written to error.log")
+                print(
+                    "A database error occurred!\n"
+                    "This should actually never happen, but is not critical.\n"
+                    "This level will not be inserted into the database.\n"
+                    "More information on what happened has been written to error.log")
                 continue
 
     time.sleep(5)
