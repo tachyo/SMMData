@@ -29,7 +29,7 @@ for url in search:
             print("{:>3} {}".format(lastResponse, r.reason))
             if lastResponse != 200:
                 tries += 1
-                sleep_sec = 30*tries
+                sleep_sec = min(3**tries,600)
                 logger.error("received {} requesting {}".format(lastResponse, url))
                 print(
                     "Request unsuccessful! we received an http error code.\n"
