@@ -28,6 +28,7 @@ for url in search:
             lastResponse = r.status_code
             print("{:>3} {}".format(lastResponse, r.reason))
             if lastResponse != 200:
+                tries += 1
                 sleep_sec = 30*tries
                 logger.error("received {} requesting {}".format(lastResponse, url))
                 print(
